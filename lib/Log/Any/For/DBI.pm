@@ -39,6 +39,8 @@ sub import {
         }
     };
 
+    # I put it in $doit in case we need to add more classes from inside $doit,
+    # e.g. DBD::*, etc.
     my $doit;
     $doit = sub {
         my @classes = @_;
