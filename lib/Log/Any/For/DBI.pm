@@ -26,12 +26,12 @@ sub import {
                 $margs->[2] = "********";
             }
 
-            $log->tracef("-> %s(%s)", $name, $margs);
+            $log->tracef("---> %s(%s)", $name, $margs);
         } else {
             if (@{$args->{result}}) {
-                $log->tracef("<- %s() = %s", $name, $args->{result});
+                $log->tracef("<--- %s() = %s", $name, $args->{result});
             } else {
-                $log->tracef("<- %s()", $name);
+                $log->tracef("<--- %s()", $name);
             }
         }
     };
