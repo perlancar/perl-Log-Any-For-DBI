@@ -15,13 +15,6 @@ sub import {
         my ($which, %args) = @_;
         my $name = $args{name};
 
-        return unless $name =~
-            /\A(
-                 DBI::(connect|connect_cached)|
-                 DBI::db::(do|prepare|select\w+)|
-                 DBI::st::(execute|bind\w+)
-             )\z/x;
-
         if ($which eq 'precall') {
             my $margs = $args{args};
 
@@ -49,6 +42,12 @@ sub import {
             classes => \@classes,
             precall_logger => sub { $logger->('precall', @_) },
             postcall_logger => sub { $logger->('postcall', @_) },
+            filter_methods =>
+                qr/\A(
+                       DBI::(connect|connect_cached)|
+                       DBI::db::(do|prepare|select\w+)|
+                       DBI::st::(execute|bind\w+)
+                   )\z/x,
         );
     };
 
