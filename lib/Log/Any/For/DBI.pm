@@ -36,7 +36,7 @@ sub import {
         }
     };
 
-    # I put it in $doit in case we need to add more classes from inside $doit,
+    # I put it in $doit in case we need to add more classes from inside $logger,
     # e.g. DBD::*, etc.
     my $doit;
     $doit = sub {
