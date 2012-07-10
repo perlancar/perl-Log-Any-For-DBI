@@ -12,11 +12,11 @@ use Scalar::Util qw(blessed);
 
 sub import {
     my $logger = sub {
-        my ($which, %args) = @_;
-        my $name = $args{name};
+        my ($which, $args) = @_;
+        my $name = $args->{name};
 
         if ($which eq 'precall') {
-            my $margs = $args{args};
+            my $margs = $args->{args};
 
             # exclude self or package
             shift @$margs;
@@ -28,7 +28,11 @@ sub import {
 
             $log->tracef("-> %s(%s)", $name, $margs);
         } else {
-            $log->tracef("<- %s() = %s", $name, $args{result});
+            if (@{$args->{result}}) {
+                $log->tracef("<- %s() = %s", $name, $args->{result});
+            } else {
+                $log->tracef("<- %s()", $name);
+            }
         }
     };
 
@@ -40,8 +44,8 @@ sub import {
 
         add_logging_to_class(
             classes => \@classes,
-            precall_logger => sub { $logger->('precall', @_) },
-            postcall_logger => sub { $logger->('postcall', @_) },
+            precall_logger => sub { $logger->('precall', shift) },
+            postcall_logger => sub { $logger->('postcall', shift) },
             filter_methods =>
                 qr/\A(
                        DBI::(connect|connect_cached)|
