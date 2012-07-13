@@ -75,14 +75,14 @@ Sample script and output:
  % TRACE=1 perl -MLog::Any::App -MDBI -MLog::Any::For::DBI \
    -e'$dbh=DBI->connect("dbi:SQLite:dbname=/tmp/tmp.db", "", "");
    $dbh->do("CREATE TABLE IF NOT EXISTS t (i INTEGER)");'
- [1] -> DBI::connect(['dbi:SQLite:dbname=/tmp/tmp.db','','********'])
- [5] <- DBI::connect() = [bless( {}, 'DBI::db' )]
- [5] -> DBI::db::do(['CREATE TABLE IF NOT EXISTS t (i INTEGER)'])
- [5] -> DBI::db::prepare(['CREATE TABLE IF NOT EXISTS t (i INTEGER)',undef])
- [5] <- DBI::db::prepare() = [bless( {}, 'DBI::st' )]
- [5] -> DBI::st::execute([])
- [5] <- DBI::st::execute() = ['0E0']
- [5] <- DBI::db::do()
+ [1] ---> DBI::connect(['dbi:SQLite:dbname=/tmp/tmp.db','','********'])
+ [5] <--- DBI::connect() = [bless( {}, 'DBI::db' )]
+ [5] ---> DBI::db::do(['CREATE TABLE IF NOT EXISTS t (i INTEGER)'])
+ [5] ---> DBI::db::prepare(['CREATE TABLE IF NOT EXISTS t (i INTEGER)',undef])
+ [5] <--- DBI::db::prepare() = [bless( {}, 'DBI::st' )]
+ [5] ---> DBI::st::execute([])
+ [5] <--- DBI::st::execute() = ['0E0']
+ [5] <--- DBI::db::do()
 
 
 =head1 SEE ALSO
