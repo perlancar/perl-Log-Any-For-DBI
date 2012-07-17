@@ -7,6 +7,7 @@ use Log::Any '$log';
 
 # VERSION
 
+use DBI;
 use Log::Any::For::Class qw(add_logging_to_class);
 use Scalar::Util qw(blessed);
 
