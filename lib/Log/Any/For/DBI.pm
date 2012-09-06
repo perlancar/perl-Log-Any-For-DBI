@@ -8,6 +8,7 @@ use Log::Any '$log';
 # VERSION
 
 use DBI;
+use List::Util qw(first);
 use Log::Any::For::Class qw(add_logging_to_class);
 use Scalar::Util qw(blessed);
 
@@ -31,6 +32,8 @@ sub _postcall_logger {
 }
 
 sub import {
+    my $class = shift;
+    my @meths = @_;
 
     # I put it in $doit in case we need to add more classes from inside $logger,
     # e.g. DBD::*, etc.
@@ -43,20 +46,22 @@ sub import {
             precall_logger => \&_precall_logger,
             postcall_logger => \&_postcall_logger,
             filter_methods => sub {
-                local $_ = shift;
-                return unless
+                my $meth = shift;
+                return unless $meth =~
                     /\A(
                          DBI::\w+|
                          DBI::db::\w+|
                          DBI::st::\w+
                      )\z/x;
-                return if
+                return if $meth =~
                     /\A(
                          (\w+::)+[_A-Z]\w+|
                          DBI::(?:install|setup)\w+|
                          DBI::db::clone|
                          DBI::trace\w*
                      )\z/x;
+                return if @meths &&
+                    !(first {$meth =~ /(^|::)\Q$_\E$/} @meths);
                 1;
             },
         );
@@ -90,6 +95,11 @@ Sample script and output:
  [5] ---> DBI::st::execute([])
  [5] <--- DBI::st::execute() = ['0E0']
  [5] <--- DBI::db::do()
+
+You can filter to log only certain methods by passing the method names as import
+arguments, for example:
+
+ use Log::Any::For::DBI qw(prepare connect);
 
 
 =head1 SEE ALSO
