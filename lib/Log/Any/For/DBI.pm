@@ -22,12 +22,14 @@ sub _precall_logger {
         $margs->[3] = "********";
     }
 
+    local $args->{logger_args}{precall_wrapper_depth} = 4;
     Log::Any::For::Class::_default_precall_logger($args);
 }
 
 sub _postcall_logger {
     my $args = shift;
 
+    local $args->{logger_args}{postcall_wrapper_depth} = 4;
     Log::Any::For::Class::_default_postcall_logger($args);
 }
 
